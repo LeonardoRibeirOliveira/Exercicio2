@@ -1,4 +1,5 @@
 ﻿using Exercicio2.Models;
+using Exercicio2.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,27 +7,24 @@ namespace Exercicio2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IDataService _dataService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IDataService dataService)
         {
-            _logger = logger;
+            _dataService = dataService;
         }
 
-        public IActionResult Index()
+        public async Task<ActionResult<IEnumerable<Data>>> Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var resultado = await _dataService.GetAll();
+            if(resultado != null)
+            {
+                return View(resultado);
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }

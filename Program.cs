@@ -1,7 +1,13 @@
+using Exercicio2.Models;
+using Exercicio2.Services;
+using Exercicio2.Services.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IDataService, DataService>();
 
 var app = builder.Build();
 

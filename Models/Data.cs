@@ -1,4 +1,6 @@
-﻿namespace Exercicio2.Models
+﻿using Microsoft.Extensions.Hosting;
+
+namespace Exercicio2.Models
 {
     public class Data
     {
@@ -11,6 +13,5 @@
         public string? story_url { get; set; }
         public DateTime created_at { get; set; }
         public int pageArtigo { get; set; }
-        public Data? data { get; set; }  //Relaciona a data por propriedade de navegação ao artigo
     }
 }
