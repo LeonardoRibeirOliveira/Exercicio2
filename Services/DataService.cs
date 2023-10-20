@@ -11,6 +11,7 @@ namespace Exercicio2.Services
     {
         private Data datas;
         private IEnumerable<Data> datasList;
+        private int pageSize;
 
         public DataService()
         {
@@ -21,11 +22,12 @@ namespace Exercicio2.Services
             string apiUrl = "https://ff9920b4-766e-4568-bf72-66331605dc30.mock.pstmn.io/teste/api/articles?page";
             List<Data> articlesWithData = new List<Data>();
             int currentPage = 1;
-            int pageSize = 6;
+            var artigos = await GetDataFromApi(apiUrl, currentPage);
+            int pageSize = artigos.total_pages;
 
-            while (pageSize-- > 0)
+            do
             {
-                var artigos = await GetDataFromApi(apiUrl, currentPage);
+                artigos = await GetDataFromApi(apiUrl, currentPage);
 
                 if (artigos != null)
                 {
@@ -39,7 +41,7 @@ namespace Exercicio2.Services
                     Console.WriteLine($"Erro ao recuperar dados da página {currentPage}");
                     break; // Sai do loop se ocorrer um erro
                 }
-            }
+            } while (pageSize-- > 0);
 
             return articlesWithData;
         }
