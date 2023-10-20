@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Artigos</title>
+    <title>Artigos - Datas</title>
     <!-- Adicione os links para os estilos do Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -18,11 +18,31 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var artigo in Model.OrderByDescending(a => a.num_comments))
+                @foreach (var artigo in Model.Where(a => !string.IsNullOrWhiteSpace(a.title) || !string.IsNullOrWhiteSpace(a.story_title))
+                .OrderByDescending(a => a.num_comments)
+                .ThenBy(a => a.title ?? a.story_title))
                 {
                     <tr>
-                        <td>@artigo.title</td>
-                        <td>@artigo.num_comments</td>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(artigo.title))
+                            {
+                                @artigo.title
+                            }
+                            else if (!string.IsNullOrWhiteSpace(artigo.story_title))
+                            {
+                                @artigo.story_title
+                            }
+                        </td>
+                        <td>
+                            @if (artigo.num_comments == null)
+                            {
+                                @:0
+                            }
+                            else
+                            {
+                                @artigo.num_comments
+                            }
+                        </td>
                     </tr>
                 }
             </tbody>

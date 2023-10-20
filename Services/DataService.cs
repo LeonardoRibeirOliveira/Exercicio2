@@ -21,14 +21,24 @@ namespace Exercicio2.Services
             string apiUrl = "https://ff9920b4-766e-4568-bf72-66331605dc30.mock.pstmn.io/teste/api/articles?page";
             List<Data> articlesWithData = new List<Data>();
             int currentPage = 1;
+            int pageSize = 6;
 
-            while (true && !articlesWithData.Any(a => !string.IsNullOrEmpty(a.url)))
+            while (pageSize-- > 0)
             {
                 var artigos = await GetDataFromApi(apiUrl, currentPage);
 
-                // Filtrar e adicionar apenas os artigos com datas
-                articlesWithData.AddRange(artigos.Data.FindAll(a => !string.IsNullOrEmpty(a.url)));
-                currentPage++;
+                if (artigos != null)
+                {
+                    // Filtrar e adicionar apenas os artigos com datas
+                    articlesWithData.AddRange(artigos.Data.FindAll(a => !string.IsNullOrEmpty(a.url)));
+                    currentPage++;
+                }
+                else
+                {
+                    // Trate erros aqui, se necessário
+                    Console.WriteLine($"Erro ao recuperar dados da página {currentPage}");
+                    break; // Sai do loop se ocorrer um erro
+                }
             }
 
             return articlesWithData;
@@ -39,7 +49,7 @@ namespace Exercicio2.Services
             using (HttpClient client = new HttpClient())
             {
                 // Construa a URL para a página desejada
-                string requestUrl = $"{apiUrl}?page={page}";
+                string requestUrl = $"{apiUrl}={page}";
 
                 HttpResponseMessage response = await client.GetAsync(requestUrl);
 
