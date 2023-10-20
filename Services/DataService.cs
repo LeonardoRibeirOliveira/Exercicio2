@@ -22,14 +22,9 @@ namespace Exercicio2.Services
             List<Data> articlesWithData = new List<Data>();
             int currentPage = 1;
 
-            while (true)
+            while (true && !articlesWithData.Any(a => !string.IsNullOrEmpty(a.url)))
             {
                 var artigos = await GetDataFromApi(apiUrl, currentPage);
-
-                if (artigos == null)
-                {
-                    break; // Não há mais páginas ou dados
-                }
 
                 // Filtrar e adicionar apenas os artigos com datas
                 articlesWithData.AddRange(artigos.Data.FindAll(a => !string.IsNullOrEmpty(a.url)));
