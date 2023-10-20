@@ -11,7 +11,6 @@ namespace Exercicio2.Services
     {
         private Data datas;
         private IEnumerable<Data> datasList;
-        private int pageSize;
 
         public DataService()
         {
